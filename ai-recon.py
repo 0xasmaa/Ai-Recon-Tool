@@ -6,10 +6,13 @@ import json
 #nmap.org domain for test
 
 parser = argparse.ArgumentParser(description="Subdomain enumeration tool")
-parser.add_argument("--target", help="Specify the domain to enumerate", required=True)
+parser.add_argument("--target", required=True, help="Specify the domain to enumerate")
+parser.add_argument("--api-key", required=True, help="Specify Claude API KEY")
 args = parser.parse_args()
 
 domain = args.target
+api_key = args.api_key
+
 print(f"[*]scanning: {domain}")
 
 try:
@@ -59,13 +62,45 @@ if not alive.stdout.split():
 alive_list = alive.stdout.strip().split("\n")
 print(f"[+] Found {len(alive_list)} alive subdomains")
 
+print(f"[*] Sending to Ai for analysis...")
+
+response = requests.post(
+    "https://api.groq.com/openai/v1/chat/completions",
+
+    headers={
+        "Authorization": f"Bearer {api_key}",
+        "content-type": "application/json" 
+    },
+    json={
+        "model": "llama-3.3-70b-versatile",
+        "max_tokens": 1024,
+        "messages": [
+            {
+                "role": "user",
+                "content": f"""Here is a list of subdomains and their HTTP status codes.
+Which ones look suspicious and why?
+Rank them by risk level: Critical, High, Medium, Low.
+
+{json.dumps(alive_list, indent=2)}"""
+            }
+        ]
+    }
+
+)
+
+print(response.json()) 
+
+ai_analysis = response.json()["choices"][0]["message"]["content"]
+print(f"\n[+] AI Analysis:\n{ai_analysis}") 
+
     # Step 4: save to json
 data = {
         "domain": domain,
         "total_subdomain": len(subdomains),
         "total_alive": len(alive_list),
         "subdomains": subdomains,
-        "alive": alive_list
+        "alive": alive_list,
+        "ai_analysis": ai_analysis
     }
 
 
