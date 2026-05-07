@@ -64,7 +64,8 @@ print(f"[+] Found {len(alive_list)} alive subdomains")
 
 print(f"[*] Sending to Ai for analysis...")
 
-response = requests.post(
+try:
+    response = requests.post(
     "https://api.groq.com/openai/v1/chat/completions",
 
     headers={
@@ -88,10 +89,18 @@ Rank them by risk level: Critical, High, Medium, Low.
 
 )
 
-print(response.json()) 
+    if response.status_code == 200:
+        ai_analysis = response.json()["choices"][0]["message"]["content"]
+        print(f"\n[+] AI Analysis:\n{ai_analysis}") 
 
-ai_analysis = response.json()["choices"][0]["message"]["content"]
-print(f"\n[+] AI Analysis:\n{ai_analysis}") 
+    else:
+        print(f"[-] Groq API error: {response.status_code}")
+        print(f"[-] Details: {response.text}")
+        ai_analysis = "AI analysis failed"
+
+except Exception as e:
+    print(f"[-] AI request failed: {e}")
+    ai_analysis = "AI analysis failed"
 
     # Step 4: save to json
 data = {
