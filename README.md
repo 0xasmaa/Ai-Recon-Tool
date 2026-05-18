@@ -4,6 +4,12 @@ An automated reconnaissance tool that combines subdomain enumeration, live host 
 
 ---
 
+![Tool Demo](images/video1.png)
+
+![Tool Demo](images/Screenshoot.png)
+
+
+
 ## What It Does
 
 ```
@@ -66,7 +72,7 @@ nuclei -update-templates
 ## Usage
 
 ```bash
-python tool.py --target example.com --api-key YOUR_GROQ_KEY
+python3 tool.py --target example.com --api-key YOUR_GROQ_KEY
 ```
 
 ### Arguments
