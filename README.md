@@ -4,9 +4,9 @@ An automated reconnaissance tool that combines subdomain enumeration, live host 
 
 ---
 
-![Tool Demo](images/video1.png)
+![Tool Demo](images/Screenshot.png)
 
-![Tool Demo](images/Screenshoot.png)
+![Tool Demo](images/video1.mp4)
 
 
 
