@@ -6,7 +6,6 @@ An automated reconnaissance tool that combines subdomain enumeration, live host 
 
 ![Tool Demo](images/Screenshot.png)
 
-![Tool Demo](images/video1.mp4)
 
 
 
